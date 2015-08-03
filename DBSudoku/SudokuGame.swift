@@ -16,24 +16,8 @@ class SudokuGame {
         setupTestGrid()
         print(grid)
         
-        print(solve(&grid))
+        print(SudokuGrid.solve(&grid))
         print(grid)
-    }
-    
-    func solve(inout grid: SudokuGrid) -> Bool {
-        if grid.isGridFull() {
-            return true
-        } else {
-            let nextIndex = grid.nextEmptyCellIndex()
-            for possibleValue in grid.validValuesAtIndex(nextIndex.col, row: nextIndex.row) {
-                grid[nextIndex.col, nextIndex.row] = possibleValue
-                if solve(&grid) {
-                    return true
-                }
-                grid[nextIndex.col, nextIndex.row] = nil
-            }
-        }
-        return false
     }
     
     func setupTestGrid() {
