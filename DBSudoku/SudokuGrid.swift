@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct SudokuGrid : SequenceType, GeneratorType {
+struct SudokuGrid {
     
     let cols = 9
     let rows = 9
@@ -26,14 +26,6 @@ struct SudokuGrid : SequenceType, GeneratorType {
         set {
             matrix[cols * row + col] = newValue
         }
-    }
-    
-    func colCount() -> Int {
-        return self.cols
-    }
-    
-    func rowCount() -> Int {
-        return self.rows
     }
     
     //MARK: Sudoku Grid Access
@@ -60,10 +52,8 @@ struct SudokuGrid : SequenceType, GeneratorType {
     
     func valuesInCurrentCell(column: Int, row: Int) -> [Int] {
         var result = [Int]()
-        let cellXIndex = Int(ceil(Double(column+1) / 3.0))
-        let cellYIndex = Int(ceil(Double(row+1) / 3.0))
-        let startXIndex = 3 * (cellXIndex - 1)
-        let startYIndex = 3 * (cellYIndex - 1)
+        let startXIndex = 3 * (Int(ceil(Double(column+1) / 3.0)) - 1)
+        let startYIndex = 3 * (Int(ceil(Double(row+1) / 3.0)) - 1)
         for x in startXIndex..<(startXIndex+3) {
             for y in startYIndex..<(startYIndex+3) {
                 if let value = self[x, y] {
@@ -97,34 +87,9 @@ struct SudokuGrid : SequenceType, GeneratorType {
     }
     
     func validValuesAtIndex(col: Int, row: Int) -> [Int] {
-        var values = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-        let columnValues = valuesInColumn(col)
-        let rowValues = valuesInRow(row)
-        let cellValues = valuesInCurrentCell(col, row: row)
-        
-        values = values.filter({columnValues.contains($0) == false}).filter({rowValues.contains($0) == false}).filter({cellValues.contains($0) == false})
-        return values
-    }
-    
-    
-    //MARK: GeneratorType
-    
-    var currentElement = 0
-    mutating func next() -> Int? {
-        if currentElement < matrix.count {
-            let curItem = currentElement
-            currentElement++
-            return matrix[curItem]
-        }
-        return nil
-    }
-    
-    //MARK: SequenceType
-    
-    typealias Generator = SudokuGrid
-    
-    func generate() -> Generator {
-        return self
+        let values = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        let existingValues = valuesInColumn(col) + valuesInRow(row) + valuesInCurrentCell(col, row: row)
+        return values.filter { existingValues.contains($0) == false }
     }
 }
 
@@ -150,6 +115,25 @@ extension SudokuGrid : CustomStringConvertible {
             }
         }
         return result
+    }
+}
+
+// Game Operations
+extension SudokuGrid {
+    static func solve(inout grid: SudokuGrid) -> Bool {
+        if grid.isGridFull() {
+            return true
+        } else {
+            let nextIndex = grid.nextEmptyCellIndex()
+            for possibleValue in grid.validValuesAtIndex(nextIndex.col, row: nextIndex.row) {
+                grid[nextIndex.col, nextIndex.row] = possibleValue
+                if solve(&grid) {
+                    return true
+                }
+                grid[nextIndex.col, nextIndex.row] = nil
+            }
+        }
+        return false
     }
 }
 
