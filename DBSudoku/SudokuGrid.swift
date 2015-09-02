@@ -40,7 +40,7 @@ struct SudokuGrid {
         return result
     }
     
-    func valuesInCurrentCell(column: Int, row: Int) -> [Int] {
+    func valuesInCurrentCell(column: Int, row: Int)->[Int]{              
         var result = [Int]()
         let startXIndex = 3 * (Int(ceil(Double(column+1) / 3.0)) - 1)
         let startYIndex = 3 * (Int(ceil(Double(row+1) / 3.0)) - 1)
