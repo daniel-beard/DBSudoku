@@ -10,22 +10,12 @@ import Foundation
 
 struct SudokuGrid {
     
-    let cols = 9
-    let rows = 9
-    
-    var matrix:[Int?]
-    
-    init(defaultValue:Int?) {
-        matrix = Array(count:cols*rows, repeatedValue:defaultValue)
-    }
+    let cols = 9, rows = 9
+    var matrix:[Int?] = Array(count: 9*9, repeatedValue: nil)
     
     subscript(col:Int, row:Int) -> Int? {
-        get {
-            return matrix[cols * row + col]
-        }
-        set {
-            matrix[cols * row + col] = newValue
-        }
+        get { return matrix[cols * row + col] }
+        set { matrix[cols * row + col] = newValue }
     }
     
     //MARK: Sudoku Grid Access
@@ -65,11 +55,9 @@ struct SudokuGrid {
     }
     
     func isGridFull() -> Bool {
-        for x in 0..<cols {
-            for y in 0..<rows {
-                if self[x, y] == nil {
-                    return false
-                }
+        for i in 0..<cols*rows {
+            if matrix[i] == nil {
+                return false
             }
         }
         return true
@@ -90,6 +78,24 @@ struct SudokuGrid {
         let values = [1, 2, 3, 4, 5, 6, 7, 8, 9]
         let existingValues = valuesInColumn(col) + valuesInRow(row) + valuesInCurrentCell(col, row: row)
         return values.filter { existingValues.contains($0) == false }
+    }
+}
+
+extension SudokuGrid { // Game Operations
+    static func solve(inout grid: SudokuGrid) -> Bool {
+        if grid.isGridFull() {
+            return true
+        } else {
+            let nextIndex = grid.nextEmptyCellIndex()
+            for possibleValue in grid.validValuesAtIndex(nextIndex.col, row: nextIndex.row) {
+                grid[nextIndex.col, nextIndex.row] = possibleValue
+                if solve(&grid) {
+                    return true
+                }
+                grid[nextIndex.col, nextIndex.row] = nil
+            }
+        }
+        return false
     }
 }
 
@@ -115,25 +121,6 @@ extension SudokuGrid : CustomStringConvertible {
             }
         }
         return result
-    }
-}
-
-// Game Operations
-extension SudokuGrid {
-    static func solve(inout grid: SudokuGrid) -> Bool {
-        if grid.isGridFull() {
-            return true
-        } else {
-            let nextIndex = grid.nextEmptyCellIndex()
-            for possibleValue in grid.validValuesAtIndex(nextIndex.col, row: nextIndex.row) {
-                grid[nextIndex.col, nextIndex.row] = possibleValue
-                if solve(&grid) {
-                    return true
-                }
-                grid[nextIndex.col, nextIndex.row] = nil
-            }
-        }
-        return false
     }
 }
 
