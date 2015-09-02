@@ -40,7 +40,7 @@ struct SudokuGrid {
         return result
     }
     
-    func valuesInCurrentCell(column: Int, row: Int)->[Int]{              
+    func valuesInCurrentCell(column: Int, row: Int)->[Int]{
         var result = [Int]()
         let startXIndex = 3 * (Int(ceil(Double(column+1) / 3.0)) - 1)
         let startYIndex = 3 * (Int(ceil(Double(row+1) / 3.0)) - 1)
@@ -63,7 +63,7 @@ struct SudokuGrid {
         return true
     }
     
-    func nextEmptyCellIndex() -> (col: Int, row: Int) {
+    func nextEmptyCellIndex() -> (col : Int, row : Int) {
         for x in 0..<cols {
             for y in 0..<rows {
                 if self[x, y] == nil {
