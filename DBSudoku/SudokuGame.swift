@@ -10,7 +10,7 @@ import Foundation
 
 class SudokuGame {
     
-    var grid = SudokuGrid(defaultValue: nil)
+    var grid = SudokuGrid()
     
     init() {
         setupTestGrid()
