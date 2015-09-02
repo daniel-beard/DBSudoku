@@ -30,7 +30,7 @@ struct SudokuGrid {
         return result
     }
     
-    func valuesInColumn(column : Int) -> [Int] {
+    func valuesInColumn(column : Int) -> [Int] {     
         var result = [Int]()
         for row in 0..<rows {
             if let value = self[column, row] {
