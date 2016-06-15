@@ -1,4 +1,4 @@
-osx_image: osx_image: xcode8
+osx_image: xcode8
 xcode_project: DBSudoku.xcodeproj
 xcode_scheme: DBSudoku
 xcode_sdk: iphonesimulator
