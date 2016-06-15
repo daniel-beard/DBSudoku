@@ -16,7 +16,7 @@ struct SudokuGrid {
     var matrix:[Int?]
     
     init(defaultValue:Int?) {
-        matrix = Array(count:cols*rows, repeatedValue:defaultValue)
+        matrix = Array(repeating: defaultValue, count: cols*rows)
     }
     
     subscript(col:Int, row:Int) -> Int? {
@@ -30,7 +30,7 @@ struct SudokuGrid {
     
     //MARK: Sudoku Grid Access
     
-    func valuesInRow(row: Int) -> [Int] {
+    func valuesInRow(_ row: Int) -> [Int] {
         var result = [Int]()
         for column in 0..<cols {
             if let value = self[column, row] {
@@ -40,7 +40,7 @@ struct SudokuGrid {
         return result
     }
     
-    func valuesInColumn(column: Int) -> [Int] {
+    func valuesInColumn(_ column: Int) -> [Int] {
         var result = [Int]()
         for row in 0..<rows {
             if let value = self[column, row] {
@@ -50,7 +50,7 @@ struct SudokuGrid {
         return result
     }
     
-    func valuesInCurrentCell(column: Int, row: Int) -> [Int] {
+    func valuesInCurrentCell(_ column: Int, row: Int) -> [Int] {
         var result = [Int]()
         let startXIndex = 3 * (Int(ceil(Double(column+1) / 3.0)) - 1)
         let startYIndex = 3 * (Int(ceil(Double(row+1) / 3.0)) - 1)
@@ -86,7 +86,7 @@ struct SudokuGrid {
         return (-1, -1)
     }
     
-    func validValuesAtIndex(col: Int, row: Int) -> [Int] {
+    func validValuesAtIndex(_ col: Int, row: Int) -> [Int] {
         let values = [1, 2, 3, 4, 5, 6, 7, 8, 9]
         let existingValues = valuesInColumn(col) + valuesInRow(row) + valuesInCurrentCell(col, row: row)
         return values.filter { existingValues.contains($0) == false }
@@ -120,7 +120,7 @@ extension SudokuGrid : CustomStringConvertible {
 
 // Game Operations
 extension SudokuGrid {
-    static func solve(inout grid: SudokuGrid) -> Bool {
+    static func solve(_ grid: inout SudokuGrid) -> Bool {
         if grid.isGridFull() {
             return true
         } else {

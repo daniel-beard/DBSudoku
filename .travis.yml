@@ -1,7 +1,5 @@
 language: objective-c
-osx_image: xcode6.4
-before_install:
-- rm -rf $(HOME)/Library/Developer/Xcode/DerivedData/*
-- xcode-install list
-- xcode-install install '7 beta 4' --no-progress --no-components
-script: xcodebuild -project DBSudoku.xcodeproject -target DBSudoku clean build
+osx_image: xcode8
+script: 
+  - xcodebuild -project DBSudoku.xcodeproj -scheme DBSudoku -sdk iphonesimulator
+
