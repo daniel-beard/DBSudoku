@@ -1,6 +1,5 @@
 language: objective-c
 osx_image: xcode8
-xcode_project: DBSudoku.xcodeproj
-xcode_scheme: DBSudoku
-xcode_sdk: iphonesimulator
+script: 
+  - xcodebuild -project DBSudoku.xcodeproj -scheme DBSudoku -sdk iphonesimulator
 
